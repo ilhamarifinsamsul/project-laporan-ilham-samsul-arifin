@@ -1,5 +1,7 @@
 import Link from "next/link";
 import NavLinks from "@/app/ui/dashboard/nav-links";
+// import icon
+import { PowerIcon } from "@heroicons/react/24/outline";
 
 // import { useRouter } from "next/navigation";
 
@@ -16,34 +18,23 @@ export default function SidebarNav() {
   return (
     <div className="w-full h-full flex flex-col px-3 py-4 md:px-2 bg-gray-200">
       <Link
-        className="flex items-center gap-2 py-2 px-4 rounded hover:bg-gray-500"
+        className="mb-2 flex items-end gap-2 py-2 px-4 rounded-md hover:bg-gray-500"
         href="/"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="w-6 h-6"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 12l8.954 8.955c.44.439 1.152.439 1.591 0L21.75 12"
-          />
-        </svg>
-        <span>Home</span>
+        <span className="hidden md:block text-3xl font-bold font-sans">
+          Laporan
+        </span>
       </Link>
-      <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
-        <NavLinks />
-
+      <NavLinks />
+      <div className="flex h-[48px] grow flex-row space-x-2 md:flex-col md:space-x-0 md:space-y-2 md:pb-4 justify-between">
+        <div className="hidden h-auto w-full grow rounded-md bg-gray-200 md:block"></div>
         <form action="">
           <button
             // onClick={handleSignOut}
-            className="mt-auto py-2 px-4 rounded bg-red-600 hover:bg-red-700 w-full text-white"
+            className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-200 p-3 text-sm font-medium hover:bg-gray-100 hover:text-gray-600 md:flex-none md:justify-start md:p-2 md:px-3"
           >
-            Sign Out
+            <PowerIcon className="w-6" />
+            <div className="hidden md:block">Sign Out</div>
           </button>
         </form>
       </div>
