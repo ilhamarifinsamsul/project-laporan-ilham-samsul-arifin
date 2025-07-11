@@ -18,7 +18,7 @@ export default function SidebarNav() {
   return (
     <div className="w-full h-full flex flex-col px-3 py-4 md:px-2 bg-gray-200">
       <Link
-        className="mb-2 flex items-end gap-2 py-2 px-4 rounded-md hover:bg-gray-500"
+        className="mb-2 flex items-end gap-2 py-2 px-4 rounded-md hover:bg-gray-200"
         href="/"
       >
         <span className="hidden md:block text-3xl font-bold font-sans">

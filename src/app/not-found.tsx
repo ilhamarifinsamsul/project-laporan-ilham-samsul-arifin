@@ -1,4 +1,3 @@
-// NotFound.js
 import React from "react";
 import Link from "next/link";
 
@@ -13,7 +12,7 @@ export default function NotFound() {
         alignItems: "center",
         justifyContent: "center",
         color: "#fff",
-        fontFamily: "monospace",
+        fontFamily: "Arial, sans-serif",
       }}
     >
       <h1 style={{ fontSize: "8rem", margin: 0 }}>404</h1>
@@ -21,13 +20,14 @@ export default function NotFound() {
       <p style={{ marginTop: 20, fontSize: "1.2rem" }}>
         Sepertinya kamu tersesat di galaksi yang salah.
       </p>
+
       <Link
         href="/"
         style={{
           marginTop: 30,
           padding: "10px 30px",
           background: "#fff",
-          color: "#764ba2",
+          color: "#090979",
           borderRadius: 30,
           textDecoration: "none",
           fontWeight: "bold",

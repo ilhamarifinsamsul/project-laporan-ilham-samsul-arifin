@@ -1,6 +1,11 @@
 "use client";
 
-import { DocumentIcon, HomeIcon, TagIcon } from "@heroicons/react/24/outline";
+import {
+  DocumentIcon,
+  HomeIcon,
+  TagIcon,
+  UserIcon,
+} from "@heroicons/react/24/outline";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -8,6 +13,7 @@ import clsx from "clsx";
 
 const navLinks = [
   { href: "/dashboard", label: "Dashboard", icon: HomeIcon },
+  { href: "/dashboard/users", label: "Users", icon: UserIcon },
   {
     href: "/dashboard/category",
     label: "Category",
