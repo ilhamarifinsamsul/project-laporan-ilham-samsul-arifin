@@ -1,6 +1,6 @@
 // src/app/api/categories/route.ts
 
-const categories = [
+let categories = [
   { id: "1", name: "Banjir" },
   { id: "2", name: "Gempa Bumi" },
 ];
@@ -84,7 +84,7 @@ export async function DELETE(request: Request) {
     });
   }
 
-  categories.splice(categories.indexOf(existingCategory), 1);
+  categories = categories.filter((c) => c.id !== id);
 
   return new Response(
     JSON.stringify({ message: "Category deleted successfully" }),
