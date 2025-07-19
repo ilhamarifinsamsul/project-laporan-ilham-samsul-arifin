@@ -1,151 +1,133 @@
 "use client";
+import { useState, useEffect } from "react";
 
-import React from "react";
-import { useEffect, useState } from "react";
-
-type Category = {
-  id: number;
+interface Category {
+  id: string;
   name: string;
-};
+}
 
 export default function CategoryPage() {
   const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
   const [name, setName] = useState("");
-  const [editId, setEditId] = useState<number | null>(null);
-  const [editName, setEditName] = useState("");
+  useEffect(() => {
+    fetch("/api/categories")
+      .then((response: Response) => response.json())
+      .then((data) => {
+        setCategories(data);
+      })
+      .catch((error) => {
+        console.error("Category:", error);
+      });
+  }, []);
 
-  // Fetch categories from the API
-  const fetchCategories = async () => {
+  // Add a new category
+  const addCategory = async () => {
     try {
-      setLoading(true);
-      const response = await fetch("/api/categories");
-      if (!response.ok) {
-        throw new Error("Failed to fetch categories");
-      }
-      const data = await response.json();
-      setCategories(data);
+      const response = await fetch("/api/categories", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name }),
+      });
+
+      const newCategory = await response.json();
+      setCategories((prev) => [...prev, newCategory]);
+      setName(""); // Clear input after adding
     } catch (error) {
-      console.error("Error fetching categories:", error);
-    } finally {
-      setLoading(false);
+      console.error("Error adding category:", error);
     }
   };
 
-  //   Function to handle adding a new category
-  const handleAddCategory = async () => {
-    await fetch("/api/categories", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ name }),
-    });
-    fetchCategories();
-    setName("");
-  };
+  // Update the categories list
+  const updateCategory = async (id: string) => {
+    try {
+      const newName = prompt("Enter new category name:");
 
-  //   Function to handle updating an existing category
-  const handleUpdateCategory = async () => {
-    if (editId) {
-      await fetch(`/api/categories/`, {
+      if (!newName) {
+        throw new Error("Failed to fetch categories");
+      }
+      const response = await fetch("/api/categories", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ id: editId, name: editName }),
+        body: JSON.stringify({ id, name: newName }),
       });
-      fetchCategories();
-      setEditId(null);
-      setEditName("");
+
+      const data = await response.json();
+      setCategories((prev) => prev.map((cat) => (cat.id === id ? data : cat)));
+    } catch (error) {
+      console.error("Error fetching categories:", error);
     }
   };
 
-  //   Function to handle deleting a category
-  const handleDeleteCategory = async (id: string) => {
-    await fetch(`/api/categories`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ id }),
-    });
-    fetchCategories();
+  const deleteCategory = async (id: string) => {
+    try {
+      const response = await fetch("/api/categories", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id }),
+      });
+
+      const data = await response.json();
+      setCategories((prev) => prev.filter((cat) => cat.id !== data.id));
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
   };
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
-  //   Render the categories and provide options to add, edit, and delete categories
   return (
-    <main className="flex min-h-screen flex-col p-6">
-      <h1 className="text-2xl font-bold gap-4 mb-4">Categories List</h1>
-
-      <div className="">
+    <div>
+      <h1>Category</h1>
+      {/* input categories */}
+      <div>
         <input
           type="text"
+          className="border p-2 rounded mr-2"
+          placeholder="Add new category"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="New category name"
-          className="border p-4 mr-2 rounded-md mb-4 border-gray-300 text-xl outline-2 placeholder:text-gray-400 gap-2"
         />
+
         <button
           type="submit"
-          onClick={handleAddCategory}
-          className="bg-blue-400 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+          onClick={addCategory}
         >
           Add Category
         </button>
       </div>
-      {loading ? (
-        <p className="text-gray-500 text-xl font-bold mt-4">Loading...</p>
-      ) : (
-        <ul className="space-y-4">
+      {categories.length > 0 ? (
+        <ul className="mt-4">
           {categories.map((category: Category) => (
-            <li key={category?.id}>
-              {editId === category.id ? (
-                <>
-                  <input
-                    type="text"
-                    className="border p-4 mr-2 rounded-md border-gray-300 text-xl outline-2 placeholder:text-gray-400 gap-2"
-                    value={editName}
-                    onChange={(e) => setEditName(e.target.value)}
-                    placeholder="Edit category name"
-                  />
-                  <button
-                    onClick={handleUpdateCategory}
-                    className="bg-green-400 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors"
-                    type="submit"
-                  >
-                    Update
-                  </button>
-                </>
-              ) : (
-                <>
-                  <span className="text-xl">{category.name}</span>
-                  <button
-                    onClick={() => {
-                      setEditId(category.id);
-                      setEditName(category.name);
-                    }}
-                    className="bg-yellow-400 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition-colors ml-2"
-                  >
-                    Edit
-                  </button>
-                  {/* button to delete category */}
-                  <button
-                    onClick={() => handleDeleteCategory(category.id.toString())}
-                    className="bg-red-400 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors ml-2"
-                  >
-                    Delete
-                  </button>
-                </>
-              )}
+            <li className="flex justify-between" key={category.id}>
+              <span className="mt-2 font-bold">{category?.name}</span>
+
+              <div>
+                <button
+                  className="bg-yellow-500 text-white px-4 py-2 mt-2 rounded"
+                  type="submit"
+                  onClick={() => updateCategory(category.id)} // Pass the category ID to update
+                >
+                  Edit
+                </button>
+                {/* delete */}
+                <button
+                  className="bg-red-500 text-white px-4 py-2 mt-2 rounded"
+                  onClick={() => deleteCategory(category.id)} // Pass the category ID to delete
+                >
+                  Delete
+                </button>
+              </div>
             </li>
           ))}
         </ul>
+      ) : (
+        <p>No categories available.</p>
       )}
-    </main>
+    </div>
   );
 }
