@@ -47,7 +47,7 @@ export default function SignInPage() {
     <section className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-md border border-gray-200">
         <form action="" className="space-y-6">
-          <h5 className="text-center text-2xl font-bold leading-tight tracking-tight text-gray-900 md:text-4xl">
+          <h5 className="text-center text-2xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
             Sign In
           </h5>
           {alert.isShow && <BaseAlert alert={alert} />}
@@ -63,7 +63,7 @@ export default function SignInPage() {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter your email"
               required
             />
@@ -80,7 +80,7 @@ export default function SignInPage() {
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter your password"
               required
             />
@@ -91,7 +91,8 @@ export default function SignInPage() {
             disabled={isLoading}
             className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center flex items-center justify-center gap-3 cursor-pointer"
           >
-            {isLoading ? <LoaderSpinner /> : "Sign In"}
+            {isLoading ? "Loading" : "Sign In"}
+            {isLoading && <LoaderSpinner />}
           </button>
           <p className="text-sm text-center text-gray-600">
             Don`t have an account?{" "}

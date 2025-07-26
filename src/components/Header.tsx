@@ -125,7 +125,7 @@ export const Header = () => {
                 About
               </Link>
               <Link
-                href=""
+                href="/signin"
                 className="text-gray-800 hover:text-blue-600 transition py-2"
                 onClick={() => setIsMenuOpen(false)}
               >

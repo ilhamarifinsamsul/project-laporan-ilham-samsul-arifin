@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
-import { PrismaClient } from "@/generated/prisma";
 import { z } from "zod";
+import { PrismaClient } from "@/generated/prisma";
 
 const prisma = new PrismaClient();
 
-export default async function POST(req: Request) {
+export async function POST(req: Request) {
   const data = await req.json();
 
   const schema = z.object({
@@ -16,15 +16,12 @@ export default async function POST(req: Request) {
 
   const { email, password, name } = schema.parse(data);
 
-  const emailExists = await prisma.users.findUnique({
+  const exist = await prisma.users.findUnique({
     where: { email },
   });
 
-  if (emailExists) {
-    return NextResponse.json(
-      { error: "Email already exists" },
-      { status: 400 }
-    );
+  if (exist) {
+    return NextResponse.json({ error: "User already exists" }, { status: 400 });
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -37,14 +34,12 @@ export default async function POST(req: Request) {
     },
   });
 
-  //   call the send-otp API after creating the user
+  // ⬇️ Call the send-otp API after user is created
   await fetch(`${process.env.BASE_URL}/api/auth/send-otp`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email }),
   });
 
-  return NextResponse.json(user);
+  return NextResponse.json({ user });
 }

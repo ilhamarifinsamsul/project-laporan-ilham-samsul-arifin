@@ -7,7 +7,6 @@ import LoaderSpinner from "@/components/loader-spinner";
 import BaseAlert from "@/components/base-alert";
 
 export default function SignUpPage() {
-  const router = useRouter();
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
   const [registerName, setRegisterName] = useState("");
@@ -17,27 +16,31 @@ export default function SignUpPage() {
     isShow: false,
   });
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const handleRegister = async () => {
     setIsLoading(true);
-
-    const response = await fetch("/api/auth/signup", {
+    console.log("Registering user:", {
+      email: registerEmail,
+      password: registerPassword,
+      name: registerName,
+    });
+    const res = await fetch("/api/auth/signup", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify({
         email: registerEmail,
         password: registerPassword,
         name: registerName,
       }),
+      headers: { "Content-Type": "application/json" },
     });
 
-    const data = await response.json();
-    if (response.ok) {
+    const data = await res.json();
+    if (res.ok) {
       setAlert({
         type: "success",
-        message: "Registration successful! Redirecting to login...",
+        message:
+          "Register success, please check your email to verify your account",
         isShow: true,
       });
       setIsLoading(false);
@@ -48,7 +51,7 @@ export default function SignUpPage() {
     } else {
       setAlert({
         type: "error",
-        message: data.message || "Registration failed. Please try again.",
+        message: data.error || "Register failed",
         isShow: true,
       });
       setIsLoading(false);
@@ -59,10 +62,12 @@ export default function SignUpPage() {
     <section className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-md border border-gray-200">
         <form action="" className="space-y-6">
-          <h5 className="text-center text-2xl font-bold leading-tight tracking-tight text-gray-900 md:text-4xl">
+          <h5 className="text-center text-2xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
             Sign Up
           </h5>
-          {alert.isShow && <BaseAlert alert={alert} />}
+          {alert.isShow && (
+            <BaseAlert alert={{ type: alert.type, message: alert.message }} />
+          )}
           <div>
             <label
               htmlFor="name"
@@ -72,10 +77,12 @@ export default function SignUpPage() {
             </label>
             <input
               type="text"
+              name="name"
               id="name"
               value={registerName}
               onChange={(e) => setRegisterName(e.target.value)}
               className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter your name"
               required
             />
           </div>
@@ -89,9 +96,11 @@ export default function SignUpPage() {
             <input
               type="email"
               id="email"
+              name="email"
               value={registerEmail}
               onChange={(e) => setRegisterEmail(e.target.value)}
               className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter your email"
               required
             />
           </div>
@@ -104,10 +113,12 @@ export default function SignUpPage() {
             </label>
             <input
               type="password"
+              name="password"
               id="password"
               value={registerPassword}
               onChange={(e) => setRegisterPassword(e.target.value)}
               className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter your password"
               required
             />
           </div>
@@ -116,7 +127,7 @@ export default function SignUpPage() {
             onClick={handleRegister}
             className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center flex items-center justify-center gap-3 cursor-pointer"
           >
-            {isLoading ? "Loading..." : "Register to your account"}
+            {isLoading ? "Registering" : "Register to your account"}
             {isLoading && <LoaderSpinner />}
           </button>
           <p className="text-sm text-gray-500 font-medium text-center">

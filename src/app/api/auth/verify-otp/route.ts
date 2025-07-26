@@ -6,38 +6,31 @@ export async function POST(req: Request) {
   const { email, otp } = await req.json();
 
   const user = await prisma.users.findUnique({ where: { email } });
-
-  if (!user) {
-    return new Response("User not found", { status: 404 });
-  }
+  if (!user)
+    return Response.json({ message: "User not found" }, { status: 404 });
 
   const otpRecord = await prisma.otps.findFirst({
     where: {
       userId: user.id,
       code: otp,
-      expires: { gt: new Date() },
+      expires: { gte: new Date() },
     },
   });
 
-  if (!otpRecord) {
-    return new Response("Invalid OTP", { status: 400 });
-  }
+  if (!otpRecord)
+    return Response.json(
+      { message: "Invalid or expired OTP" },
+      { status: 400 }
+    );
 
-  //   otp valid, delete it
-  await prisma.otps.deleteMany({
-    where: {
-      id: otpRecord.id,
-    },
-  });
+  // OTP valid, delete it (optional)
+  await prisma.otps.delete({ where: { id: otpRecord.id } });
 
-  //   update verifiedAt
+  // ✅ update verifiedAt
   await prisma.users.update({
-    where: {
-      id: user.id,
-    },
-    data: {
-      verifiedAt: new Date(),
-    },
+    where: { id: user.id },
+    data: { verifiedAt: new Date() },
   });
-  return new Response("OTP verified successfully", { status: 200 });
+
+  return Response.json({ message: "OTP verified" });
 }
