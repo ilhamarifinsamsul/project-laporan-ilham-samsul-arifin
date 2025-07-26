@@ -45,7 +45,7 @@ export default function SignInPage() {
 
   return (
     <section className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-md borderborder-gray-200">
+      <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-md border border-gray-200">
         <form action="" className="space-y-6">
           <h5 className="text-center text-2xl font-bold leading-tight tracking-tight text-gray-900 md:text-4xl">
             Sign In
@@ -95,7 +95,7 @@ export default function SignInPage() {
           </button>
           <p className="text-sm text-center text-gray-600">
             Don`t have an account?{" "}
-            <Link href="/auth/signup" className="text-blue-600 hover:underline">
+            <Link href="/signup" className="text-blue-600 hover:underline">
               Sign Up
             </Link>
           </p>
