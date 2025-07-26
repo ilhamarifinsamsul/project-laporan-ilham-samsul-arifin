@@ -89,7 +89,7 @@ export default function SignInPage() {
             type="button"
             onClick={handleLogin}
             disabled={isLoading}
-            className="w-full px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center flex items-center justify-center gap-3 cursor-pointer"
           >
             {isLoading ? <LoaderSpinner /> : "Sign In"}
           </button>
