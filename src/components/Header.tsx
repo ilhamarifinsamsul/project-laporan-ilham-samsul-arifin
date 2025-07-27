@@ -3,6 +3,12 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { GlobeAltIcon } from "@heroicons/react/24/outline";
+import {
+  Bars3Icon,
+  HomeIcon,
+  UserCircleIcon,
+  UserPlusIcon,
+} from "@heroicons/react/24/outline";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -27,8 +33,8 @@ export const Header = () => {
 
   return (
     <header
-      className={`fixed w-full z-50 transition-all duration-300 ${
-        isScrolled ? "bg-white shadow-md py-2" : "bg-transparent py-4"
+      className={`fixed w-full z-50 transition-all duration-300 bg-gray-200 ${
+        isScrolled ? "bg-gray-300 shadow-md py-2" : "bg-gray-200 py-4"
       }`}
     >
       <div className="container mx-auto px-4">
@@ -48,22 +54,35 @@ export const Header = () => {
           <nav className="hidden md:flex space-x-8">
             <Link
               href="/"
-              className="text-gray-800 hover:text-blue-600 transition"
+              className="text-gray-800 hover:text-blue-600 transition flex items-center gap-1.5 justify-center"
             >
+              <HomeIcon className="w-6" />
               Home
             </Link>
+
             <Link
               href="/about"
-              className="text-gray-800 hover:text-blue-600 transition"
+              className="text-gray-800 hover:text-blue-600 transition flex items-center gap-1.5 justify-center"
             >
+              <Bars3Icon className="w-6" />
               About
             </Link>
-            <Link
-              href="/signin"
-              className="text-gray-800 hover:text-blue-600 transition"
-            >
-              Login
-            </Link>
+            <div className="hidden md:block items-center gap-2 lg:flex">
+              <Link
+                href="/signin"
+                className="px-4 py-2 rounded bg-gray-200 text-gray-800 hover:text-blue-600 transition  hover:bg-gray-100 flex items-center gap-1.5 justify-center"
+              >
+                <UserCircleIcon className="w-6" />
+                Signin
+              </Link>
+              <Link
+                href="/signup"
+                className="px-4 py-2 rounded bg-gray-300 text-gray-800 hover:text-blue-600 transition hover:bg-gray-100 flex items-center gap-1.5 justify-center"
+              >
+                <UserPlusIcon className="w-6" />
+                Signup
+              </Link>
+            </div>
           </nav>
 
           {/* Mobile Menu Button */}
@@ -112,25 +131,38 @@ export const Header = () => {
             <div className="flex flex-col space-y-3">
               <Link
                 href="/"
-                className="text-gray-800 hover:text-blue-600 transition py-2"
+                className="text-gray-800 hover:text-blue-600 transition flex items-center gap-1.5 py-2"
                 onClick={() => setIsMenuOpen(false)}
               >
+                <HomeIcon className="w-6" />
                 Home
               </Link>
               <Link
                 href="/about"
-                className="text-gray-800 hover:text-blue-600 transition py-2"
+                className="text-gray-800 hover:text-blue-600 transition flex items-center gap-1.5 py-2"
                 onClick={() => setIsMenuOpen(false)}
               >
+                <Bars3Icon className="w-6" />
                 About
               </Link>
-              <Link
-                href="/signin"
-                className="text-gray-800 hover:text-blue-600 transition py-2"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Login
-              </Link>
+              <div className="items-center mt-6 flex gap-2">
+                <Link
+                  href="/signin"
+                  className="px-4 py-2 rounded bg-gray-200 text-gray-800 hover:text-blue-600 transition hover:bg-gray-100 flex items-center gap-1.5"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <UserCircleIcon className="w-6" />
+                  Signin
+                </Link>
+                <Link
+                  href="/signin"
+                  className="px-4 py-2 rounded bg-gray-300 text-gray-800 hover:text-blue-600 transition hover:bg-gray-100 flex items-center gap-1.5"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <UserPlusIcon className="w-6" />
+                  Signup
+                </Link>
+              </div>
             </div>
           </div>
         )}
