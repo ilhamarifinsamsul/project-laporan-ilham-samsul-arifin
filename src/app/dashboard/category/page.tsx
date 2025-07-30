@@ -1,4 +1,5 @@
 "use client";
+
 import { useState, useEffect } from "react";
 
 interface Category {
@@ -81,9 +82,8 @@ export default function CategoryPage() {
 
   return (
     <div>
-      <h1>Category</h1>
       {/* input categories */}
-      <div>
+      <div className="flex items-center">
         <input
           type="text"
           className="border p-2 rounded mr-2"
@@ -101,30 +101,50 @@ export default function CategoryPage() {
         </button>
       </div>
       {categories.length > 0 ? (
-        <ul className="mt-4">
-          {categories.map((category: Category) => (
-            <li className="flex justify-between" key={category.id}>
-              <span className="mt-2 font-bold">{category?.name}</span>
-
-              <div>
-                <button
-                  className="bg-yellow-500 text-white px-4 py-2 mt-2 rounded"
-                  type="submit"
-                  onClick={() => updateCategory(category.id)} // Pass the category ID to update
-                >
-                  Edit
-                </button>
-                {/* delete */}
-                <button
-                  className="bg-red-500 text-white px-4 py-2 mt-2 rounded"
-                  onClick={() => deleteCategory(category.id)} // Pass the category ID to delete
-                >
-                  Delete
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
+        // List of categories
+        <table className="mt-8 min-w-full rounded-md text-gray-900 table-auto">
+          <thead className="bg-gray-100 text-left text-lg font-semibold rounded-md ">
+            <tr>
+              <th scope="col" className="px-6 py-4 font-medium">
+                No
+              </th>
+              <th scope="col" className="px-6 py-4 font-medium">
+                Category
+              </th>
+              <th scope="col" className="px-6 py-4 font-medium">
+                Action
+              </th>
+            </tr>
+          </thead>
+          <tbody className="bg-white border border-gray-200 min-w-full">
+            {categories.map((category: Category, index: number) => (
+              <tr key={category.id} className="border border-gray-200">
+                <td className="px-6 py-4 whitespace-nowrap text-sm ">
+                  {index + 1}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm ">
+                  {category.name}
+                </td>
+                <td>
+                  <button
+                    className="bg-yellow-500 text-white px-4 py-2 mt-2 rounded"
+                    type="submit"
+                    onClick={() => updateCategory(category.id)} // Pass the category ID to update
+                  >
+                    Edit
+                  </button>
+                  {/* delete */}
+                  <button
+                    className="bg-red-500 text-white px-4 py-2 mt-2 rounded ml-2"
+                    onClick={() => deleteCategory(category.id)} // Pass the category ID to delete
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       ) : (
         <p>No categories available.</p>
       )}

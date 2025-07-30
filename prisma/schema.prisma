@@ -41,4 +41,17 @@ model Category {
   name      String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  laporan laporan[]
+}
+
+model laporan {
+  id        String   @id @default(cuid())
+  categoryId String
+  category  Category @relation(fields: [categoryId], references: [id])
+  title     String?
+  description String?
+  image     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
