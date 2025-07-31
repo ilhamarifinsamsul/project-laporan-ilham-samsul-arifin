@@ -1,2 +1,2 @@
 # Ignore Prisma generated client
-app/generated/prisma/
+src/generated/prisma/
