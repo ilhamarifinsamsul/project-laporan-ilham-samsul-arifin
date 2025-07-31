@@ -149,12 +149,12 @@ export default function CategoryPage() {
                   <td>
                     <Link
                       href={`/dashboard/category/${category.id}/edit`}
-                      className="bg-yellow-500 text-white px-4 py-2 mt-2 rounded mr-2"
+                      className="bg-yellow-500 text-white px-4 py-2 mt-2 rounded mr-2 hover:bg-yellow-700"
                     >
                       Edit
                     </Link>
                     <button
-                      className="bg-red-500 text-white px-4 py-2 mt-2 rounded ml-2"
+                      className="bg-red-500 hover:bg-red-700 text-white px-4 py-2 mt-2 rounded ml-2"
                       onClick={() => deleteCategory(category.id)}
                     >
                       Delete

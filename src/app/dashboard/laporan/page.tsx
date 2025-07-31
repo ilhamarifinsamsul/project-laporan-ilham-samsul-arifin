@@ -126,12 +126,18 @@ export default function LaporanPage() {
           <tbody className="bg-white rounded-md">
             {currentItems.length > 0 ? (
               currentItems.map((laporan, index: number) => (
-                <tr key={laporan.id} className="border-b">
+                <tr key={laporan.id} className="">
                   <td className="py-2 px-4">{indexOfFirstItem + index + 1}</td>
                   <td className="py-2 px-4">{laporan.title}</td>
                   <td className="py-2 px-4">{laporan.description}</td>
                   <td className="py-2 px-4">{laporan.category?.name || "-"}</td>
                   <td className="py-2 px-4">
+                    <Link
+                      href={`/dashboard/laporan/${laporan.id}/edit`}
+                      className="mr-2 bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
+                    >
+                      Edit
+                    </Link>
                     <button
                       className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                       onClick={() => deleteLaporan(laporan.id)}
