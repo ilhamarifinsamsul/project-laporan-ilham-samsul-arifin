@@ -1,15 +1,13 @@
+// src/app/api/auth/[...nextauth]/route.ts
 import NextAuth from "next-auth";
-import bcrypt from "bcrypt";
-import { PrismaClient } from "@/generated/prisma";
-import { NextAuthOptions } from "next-auth";
-import { z } from "zod";
-
-// Import your credentials provider
 import CredentialsProvider from "next-auth/providers/credentials";
+import bcrypt from "bcrypt";
+import { z } from "zod";
+import { PrismaClient } from "@/generated/prisma";
 
 const prisma = new PrismaClient();
 
-export const authOptions: NextAuthOptions = {
+const handler = NextAuth({
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -17,7 +15,6 @@ export const authOptions: NextAuthOptions = {
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },
-
       async authorize(credentials) {
         const schema = z.object({
           email: z.string().email(),
@@ -30,22 +27,14 @@ export const authOptions: NextAuthOptions = {
           where: { email },
         });
 
-        if (!user) {
-          throw new Error("No user found with the provided email.");
-        }
-
-        if (!user.password) {
-          throw new Error("User does not have a password set.");
-        }
-
-        if (!user.verifiedAt) {
-          throw new Error("User email is not verified.");
+        if (!user || !user.password || !user.verifiedAt) {
+          throw new Error("Invalid login");
         }
 
         const isPasswordValid = await bcrypt.compare(password, user.password);
 
         if (!isPasswordValid) {
-          throw new Error("Invalid password.");
+          throw new Error("Invalid password");
         }
 
         return {
@@ -63,8 +52,7 @@ export const authOptions: NextAuthOptions = {
     signIn: "/signin",
   },
   secret: process.env.NEXTAUTH_SECRET,
-};
+});
 
-const handler = NextAuth(authOptions);
-
+// ✅ Hanya ekspor handler sebagai GET dan POST
 export { handler as GET, handler as POST };
