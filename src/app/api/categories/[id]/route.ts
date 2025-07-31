@@ -1,17 +1,15 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@/generated/prisma";
+import { NextRequest } from "next/server";
 
 const prisma = new PrismaClient();
 
-// ✅ GET handler dengan error handling yang diperbaiki
 export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const category = await prisma.category.findUnique({
-      where: { id: params.id },
-    });
+    const category = (await params).id;
 
     if (!category) {
       return NextResponse.json(
@@ -22,7 +20,6 @@ export async function GET(
 
     return NextResponse.json(category);
   } catch (error: unknown) {
-    // Type guard untuk menentukan jenis error
     if (error instanceof Error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
@@ -33,7 +30,6 @@ export async function GET(
   }
 }
 
-// ✅ PUT handler dengan error handling yang diperbaiki
 export async function PUT(
   request: Request,
   { params }: { params: { id: string } }
@@ -53,9 +49,7 @@ export async function PUT(
 
     return NextResponse.json(updatedCategory);
   } catch (error: unknown) {
-    // Handle Prisma error khusus
     if (error instanceof Error) {
-      // Error untuk record tidak ditemukan
       if (error.message.includes("RecordNotFound")) {
         return NextResponse.json(
           { error: "Category not found" },
