@@ -1,36 +1,72 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { PrismaClient } from "@/generated/prisma";
 
 const prisma = new PrismaClient();
 
-// ✅ GET handler
+// ✅ GET handler dengan error handling yang diperbaiki
 export async function GET(
-  request: NextRequest,
+  request: Request,
   { params }: { params: { id: string } }
 ) {
-  const category = await prisma.category.findUnique({
-    where: { id: params.id },
-  });
+  try {
+    const category = await prisma.category.findUnique({
+      where: { id: params.id },
+    });
 
-  if (!category) {
-    return NextResponse.json({ error: "Category not found" }, { status: 404 });
+    if (!category) {
+      return NextResponse.json(
+        { error: "Category not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(category);
+  } catch (error: unknown) {
+    // Type guard untuk menentukan jenis error
+    if (error instanceof Error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+    return NextResponse.json(
+      { error: "An unknown error occurred" },
+      { status: 500 }
+    );
   }
-
-  return NextResponse.json(category);
 }
 
-// ✅ PUT handler
+// ✅ PUT handler dengan error handling yang diperbaiki
 export async function PUT(
-  request: NextRequest,
+  request: Request,
   { params }: { params: { id: string } }
 ) {
-  const body = await request.json();
-  const { name } = body;
+  try {
+    const body = await request.json();
+    const { name } = body;
 
-  const updatedCategory = await prisma.category.update({
-    where: { id: params.id },
-    data: { name },
-  });
+    if (!name) {
+      return NextResponse.json({ error: "Name is required" }, { status: 400 });
+    }
 
-  return NextResponse.json(updatedCategory);
+    const updatedCategory = await prisma.category.update({
+      where: { id: params.id },
+      data: { name },
+    });
+
+    return NextResponse.json(updatedCategory);
+  } catch (error: unknown) {
+    // Handle Prisma error khusus
+    if (error instanceof Error) {
+      // Error untuk record tidak ditemukan
+      if (error.message.includes("RecordNotFound")) {
+        return NextResponse.json(
+          { error: "Category not found" },
+          { status: 404 }
+        );
+      }
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+    return NextResponse.json(
+      { error: "An unknown error occurred" },
+      { status: 500 }
+    );
+  }
 }
