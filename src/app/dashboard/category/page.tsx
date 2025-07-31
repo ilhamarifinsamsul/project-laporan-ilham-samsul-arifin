@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
+import BaseAlert from "@/components/base-alert";
 
 interface Category {
   id: string;
@@ -12,6 +14,7 @@ export default function CategoryPage() {
   const [name, setName] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
+  const [alert, setAlert] = useState({ type: "", message: "", isShow: false });
 
   useEffect(() => {
     fetch("/api/categories")
@@ -36,6 +39,22 @@ export default function CategoryPage() {
       });
 
       const newCategory = await response.json();
+      if (newCategory?.error) {
+        setAlert({
+          type: "error",
+          message: newCategory.error,
+          isShow: true,
+        });
+      } else {
+        setAlert({
+          type: "success",
+          message: "Category added successfully",
+          isShow: true,
+        });
+        setTimeout(() => {
+          setAlert({ type: "", message: "", isShow: false });
+        }, 5000);
+      }
       setCategories((prev) => [...prev, newCategory]);
       setName(""); // Clear input after adding
       // Go to the last page if the new item would be on a new page
@@ -44,33 +63,6 @@ export default function CategoryPage() {
     } catch (error) {
       console.error("Error adding category:", error);
     }
-  };
-
-  // Update the categories list
-  // const updateCategory = async (id: string) => {
-  //   try {
-  //     const newName = prompt("Enter new category name:");
-
-  //     if (!newName) {
-  //       throw new Error("Failed to fetch categories");
-  //     }
-  //     const response = await fetch("/api/categories", {
-  //       method: "PUT",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ id, name: newName }),
-  //     });
-
-  //     const data = await response.json();
-  //     setCategories((prev) => prev.map((cat) => (cat.id === id ? data : cat)));
-  //   } catch (error) {
-  //     console.error("Error fetching categories:", error);
-  //   }
-  // };
-  const navigateToEdit = (id: string) => {
-    const url = `/dashboard/category/${id}/edit`; // Replace with your edit page route
-    window.location.href = url;
   };
 
   const deleteCategory = async (id: string) => {
@@ -105,7 +97,7 @@ export default function CategoryPage() {
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   return (
-    <div>
+    <div className="p-4 min-h-screen bg-gray-200 py-8 rounded-md">
       {/* input categories */}
       <div className="flex items-center">
         <input
@@ -123,7 +115,11 @@ export default function CategoryPage() {
         >
           Add Category
         </button>
+        <div className="mt-4">
+          {alert.isShow && <BaseAlert alert={alert} />}
+        </div>
       </div>
+
       {categories.length > 0 ? (
         <>
           {/* List of categories */}
@@ -151,13 +147,12 @@ export default function CategoryPage() {
                     {category.name}
                   </td>
                   <td>
-                    <button
-                      className="bg-yellow-500 text-white px-4 py-2 mt-2 rounded"
-                      type="submit"
-                      onClick={() => navigateToEdit(category.id)}
+                    <Link
+                      href={`/dashboard/category/${category.id}/edit`}
+                      className="bg-yellow-500 text-white px-4 py-2 mt-2 rounded mr-2"
                     >
                       Edit
-                    </button>
+                    </Link>
                     <button
                       className="bg-red-500 text-white px-4 py-2 mt-2 rounded ml-2"
                       onClick={() => deleteCategory(category.id)}
@@ -176,7 +171,7 @@ export default function CategoryPage() {
               <button
                 onClick={() => paginate(Math.max(1, currentPage - 1))}
                 disabled={currentPage === 1}
-                className={`px-3 py-1 rounded-l-md border ${
+                className={`px-3 py-1 rounded-l-md ${
                   currentPage === 1
                     ? "bg-gray-200 text-gray-500 cursor-not-allowed"
                     : "bg-white text-gray-700 hover:bg-gray-50"
@@ -190,7 +185,7 @@ export default function CategoryPage() {
                   <button
                     key={number}
                     onClick={() => paginate(number)}
-                    className={`px-3 py-1 border-t border-b ${
+                    className={`px-3 py-1  ${
                       currentPage === number
                         ? "bg-blue-500 text-white"
                         : "bg-white text-gray-700 hover:bg-gray-50"
@@ -204,7 +199,7 @@ export default function CategoryPage() {
               <button
                 onClick={() => paginate(Math.min(totalPages, currentPage + 1))}
                 disabled={currentPage === totalPages}
-                className={`px-3 py-1 rounded-r-md border ${
+                className={`px-3 py-1 rounded-r-md  ${
                   currentPage === totalPages
                     ? "bg-gray-200 text-gray-500 cursor-not-allowed"
                     : "bg-white text-gray-700 hover:bg-gray-50"
