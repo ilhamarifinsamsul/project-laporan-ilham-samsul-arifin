@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
 import bcrypt from "bcrypt";
-import { PrismaClient } from "@/generated/prisma";
+import { PrismaClient } from "../../../../generated/prisma";
 import { NextAuthOptions } from "next-auth";
 import { z } from "zod";
 
