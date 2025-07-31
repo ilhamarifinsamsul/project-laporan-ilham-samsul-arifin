@@ -9,7 +9,9 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const category = (await params).id;
+    const category = await prisma.laporan.findUnique({
+      where: { id: (await params).id },
+    });
 
     if (!category) {
       return NextResponse.json(
