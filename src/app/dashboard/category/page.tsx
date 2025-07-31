@@ -140,10 +140,10 @@ export default function CategoryPage() {
             <tbody className="bg-white border border-gray-200 min-w-full">
               {currentItems.map((category: Category, index: number) => (
                 <tr key={category.id} className="border border-gray-200">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm ">
+                  <td className="px-6 py-4 whitespace-nowrap">
                     {indexOfFirstItem + index + 1}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm ">
+                  <td className="px-6 py-4 whitespace-nowrap">
                     {category.name}
                   </td>
                   <td>
