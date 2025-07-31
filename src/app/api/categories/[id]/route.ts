@@ -1,10 +1,11 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@/generated/prisma";
 
 const prisma = new PrismaClient();
 
+// ✅ GET handler
 export async function GET(
-  request: Request,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   const category = await prisma.category.findUnique({
@@ -18,11 +19,13 @@ export async function GET(
   return NextResponse.json(category);
 }
 
+// ✅ PUT handler
 export async function PUT(
-  request: Request,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const { name } = await request.json();
+  const body = await request.json();
+  const { name } = body;
 
   const updatedCategory = await prisma.category.update({
     where: { id: params.id },
