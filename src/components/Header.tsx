@@ -61,7 +61,7 @@ export const Header = () => {
             </Link>
 
             <Link
-              href="/about"
+              href="/"
               className="text-gray-800 hover:text-blue-600 transition flex items-center gap-1.5 justify-center"
             >
               <Bars3Icon className="w-6" />
@@ -138,7 +138,7 @@ export const Header = () => {
                 Home
               </Link>
               <Link
-                href="/about"
+                href="/"
                 className="text-gray-800 hover:text-blue-600 transition flex items-center gap-1.5 py-2"
                 onClick={() => setIsMenuOpen(false)}
               >
