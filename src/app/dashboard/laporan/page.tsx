@@ -212,8 +212,8 @@ export default function LaporanPage() {
             </nav>
           </div>
         )}
+        <Footer />
       </div>
-      <Footer />
     </>
   );
 }

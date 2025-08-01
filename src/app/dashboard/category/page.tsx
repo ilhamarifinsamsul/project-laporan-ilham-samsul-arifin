@@ -217,8 +217,8 @@ export default function CategoryPage() {
         ) : (
           <p>No categories available.</p>
         )}
+        <Footer />
       </div>
-      <Footer />
     </>
   );
 }
