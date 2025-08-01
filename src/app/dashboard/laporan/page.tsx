@@ -103,7 +103,7 @@ export default function LaporanPage() {
         />
       </div>
 
-      <div className="flex mb-4 mx-auto px-4">
+      <div className="flex mb-4 mx-auto px-4 flex-col min-h-screen">
         <table className="w-full table-auto border-collapse">
           <thead className="bg-gray-100 text-left text-lg font-semibold rounded-md">
             <tr className="text-gray-600 rounded-md">

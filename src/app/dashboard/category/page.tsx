@@ -98,7 +98,7 @@ export default function CategoryPage() {
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   return (
-    <div className="p-4 min-h-screen bg-gray-200 py-8 rounded-md">
+    <div className="p-4 min-h-screen bg-gray-200 py-8 rounded-md flex flex-col">
       {/* input categories */}
       <div className="flex items-center">
         <input
