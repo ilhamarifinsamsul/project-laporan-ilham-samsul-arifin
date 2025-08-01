@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Footer } from "@/components/Footer";
 
 interface Laporan {
   id: string;
@@ -206,6 +207,7 @@ export default function LaporanPage() {
           </nav>
         </div>
       )}
+      <Footer />
     </div>
   );
 }
