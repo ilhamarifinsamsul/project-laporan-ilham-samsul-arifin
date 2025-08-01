@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import Image from "next/image";
 
 interface Laporan {
   id: string;
@@ -11,7 +10,6 @@ interface Laporan {
     id: string;
     name: string;
   };
-  image: string | null;
 }
 
 export default function LaporanPage() {
@@ -140,18 +138,6 @@ export default function LaporanPage() {
                     <td className="py-2 px-4">{laporan.description}</td>
                     <td className="py-2 px-4">
                       {laporan.category?.name || "-"}
-                    </td>
-                    <td className="py-2 px-4">
-                      {laporan.image ? (
-                        <Image
-                          src={laporan.image}
-                          alt={laporan.title}
-                          width={100}
-                          height={100}
-                        />
-                      ) : (
-                        "-"
-                      )}
                     </td>
 
                     <td className="py-2 px-4">

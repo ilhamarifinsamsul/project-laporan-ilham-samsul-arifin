@@ -16,7 +16,6 @@ export default function CreateLaporanPage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [alert, setAlert] = useState({ type: "", message: "", isShow: false });
   const [isLoading, setIsLoading] = useState(false);
-  const [image, setImage] = useState<File | null>(null);
 
   const router = useRouter();
 
@@ -44,75 +43,15 @@ export default function CreateLaporanPage() {
   }, []);
 
   // Fungsi untuk menambahkan laporan
-  // const addLaporan = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   setIsLoading(true);
-
-  //   // Validasi input
-  //   if (!title || !description || !categoryId) {
-  //     setAlert({
-  //       type: "error",
-  //       message: "Harap isi semua field yang wajib diisi",
-  //       isShow: true,
-  //     });
-  //     setIsLoading(false);
-  //     return;
-  //   }
-
-  //   try {
-  //     const response = await fetch("/api/laporan", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         title,
-  //         description,
-  //         categoryId,
-  //       }),
-  //     });
-
-  //     const data = await response.json();
-
-  //     if (!response.ok) {
-  //       throw new Error(data.error || "Gagal menambahkan laporan");
-  //     }
-
-  //     setAlert({
-  //       type: "success",
-  //       message: "Laporan berhasil ditambahkan",
-  //       isShow: true,
-  //     });
-
-  //     router.push("/dashboard/laporan");
-
-  //     // Reset form
-  //     setTitle("");
-  //     setDescription("");
-  //     setCategoryId("");
-  //   } catch (error) {
-  //     console.error("Error adding laporan:", error);
-  //     setAlert({
-  //       type: "error",
-  //       message: "Terjadi kesalahan saat menambahkan laporan",
-  //       isShow: true,
-  //     });
-  //   } finally {
-  //     setIsLoading(false);
-  //     setTimeout(() => {
-  //       setAlert({ type: "", message: "", isShow: false });
-  //     }, 5000);
-  //   }
-  // };
-
   const addLaporan = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    if (!title || !description || !categoryId || !image) {
+    // Validasi input
+    if (!title || !description || !categoryId) {
       setAlert({
         type: "error",
-        message: "Harap isi semua field dan pilih gambar",
+        message: "Harap isi semua field yang wajib diisi",
         isShow: true,
       });
       setIsLoading(false);
@@ -120,25 +59,38 @@ export default function CreateLaporanPage() {
     }
 
     try {
-      const formData = new FormData();
-      formData.append("title", title);
-      formData.append("description", description);
-      formData.append("categoryId", categoryId);
-      formData.append("image", image);
-
       const response = await fetch("/api/laporan", {
         method: "POST",
-        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title,
+          description,
+          categoryId,
+        }),
       });
 
       const data = await response.json();
 
-      if (!response.ok)
+      if (!response.ok) {
         throw new Error(data.error || "Gagal menambahkan laporan");
+      }
+
+      setAlert({
+        type: "success",
+        message: "Laporan berhasil ditambahkan",
+        isShow: true,
+      });
 
       router.push("/dashboard/laporan");
+
+      // Reset form
+      setTitle("");
+      setDescription("");
+      setCategoryId("");
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error adding laporan:", error);
       setAlert({
         type: "error",
         message: "Terjadi kesalahan saat menambahkan laporan",
@@ -146,10 +98,9 @@ export default function CreateLaporanPage() {
       });
     } finally {
       setIsLoading(false);
-      setTimeout(
-        () => setAlert({ type: "", message: "", isShow: false }),
-        5000
-      );
+      setTimeout(() => {
+        setAlert({ type: "", message: "", isShow: false });
+      }, 5000);
     }
   };
 
@@ -231,21 +182,6 @@ export default function CreateLaporanPage() {
                   </option>
                 ))}
               </select>
-            </div>
-
-            <div className="mb-4">
-              <label
-                className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="image"
-              >
-                Gambar
-              </label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => setImage(e.target.files?.[0] || null)}
-                required
-              />
             </div>
 
             <div className="flex justify-end">
