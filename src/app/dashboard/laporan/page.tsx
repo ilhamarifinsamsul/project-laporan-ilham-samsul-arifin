@@ -120,9 +120,6 @@ export default function LaporanPage() {
                   Category
                 </th>
                 <th scope="col" className="py-2 px-4">
-                  Image
-                </th>
-                <th scope="col" className="py-2 px-4">
                   Action
                 </th>
               </tr>
