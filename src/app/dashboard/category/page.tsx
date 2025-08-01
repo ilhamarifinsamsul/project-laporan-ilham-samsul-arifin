@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import BaseAlert from "@/components/base-alert";
-import { Footer } from "@/components/Footer";
 
 interface Category {
   id: string;
@@ -217,7 +216,6 @@ export default function CategoryPage() {
         ) : (
           <p>No categories available.</p>
         )}
-        <Footer />
       </div>
     </>
   );
